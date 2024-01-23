@@ -3,6 +3,9 @@ php artisan make:model name -m
 
 php artisan migrate
 
+php artisan make:migration add_img_food
+==> thêm col mới vào db , cập nhật thêm , không cần đập đi làm lại
+
 php artisan migrate:reset
 php artisan migrate:refresh
 => khi thêm data mới thì reset data cũ 

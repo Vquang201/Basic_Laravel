@@ -21,27 +21,34 @@ class FoodController extends Controller
         return view('foods/index', compact('foods'));
     }
 
-    public function store(RequestVadidate $request)
+    public function store(Request $request)
     {
         // $food = new Food();
         // $food->name = $request->input('name');
         // $food->count = $request->input('count');
         // $food->description = $request->input('description');
 
-        // $request->validate([
-        //     'name' => new Uppercase,
-        //     'count' => 'required|min:0',
-        //     'category_id' => 'required'
-        // ]);
+        $request->validate([
+            'name' => new Uppercase,
+            'count' => 'required|min:0',
+            'category_id' => 'required',
+            'image' => 'required|mimes:jpg,png|max:6000'
+        ]);
 
-        $request->validate([]);
+        // $request->validate([]);
+
+        // upload image
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images'), $imageName);
 
 
         $food = Food::create([
             'name' => $request->input('name'),
             'count' => $request->input('count'),
             'description' => $request->input('description'),
-            'category_id' => $request->input('category_id')
+            'category_id' => $request->input('category_id'),
+            'image_path' => $imageName
         ]);
 
 
@@ -59,6 +66,7 @@ class FoodController extends Controller
 
     public function edit($id)
     {
+
         $food = Food::find($id);
         return view('foods/edit', compact('food'));
     }
