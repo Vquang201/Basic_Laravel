@@ -1,0 +1,38 @@
+php artisan make:model name -m
+=> tạo model và thêm migration
+
+php artisan migrate
+
+php artisan migrate:reset
+php artisan migrate:refresh
+=> khi thêm data mới thì reset data cũ 
+=> 2 lênh trên xóa data cũ rồi update
+php artisan migrate:rollback
+=> kh cần xóa data cũ
+php artisan migrate:status
+
+
+php artisan make:factory PostFactory --model=Post
+=> tạo PostFactory kèm theo model là Post
+php artisan tinker
+=> tạo trang tinker để thao tác
+   + trong này : \App\Models\Post::factory()->create();
+   => tạo data fake theo field mặc định trong model Post
+
+mysql -u root -p
+ + show databases ;
+ + use (database);
+ + show tables;
+ + describe posts;
+
+
+php artisan route:list
+
+
+php artisan tinker
+ => Sau đó trong tinker:
+Schema::dropIfExists('categories');
+ =>Sau khi xóa bảng 'categories', bạn có thể chạy lại migration bằng lệnh:
+
+php artisan make:Rule Uppercase
+=> sử dụng new Uppercase;
