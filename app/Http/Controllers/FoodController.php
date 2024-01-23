@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RequestVadidate;
 use App\Models\Category;
 use App\Models\Food;
+use App\Rules\Uppercase;
 use Illuminate\Http\Request;
+
 
 
 class FoodController extends Controller
@@ -18,12 +21,21 @@ class FoodController extends Controller
         return view('foods/index', compact('foods'));
     }
 
-    public function store(Request $request)
+    public function store(RequestVadidate $request)
     {
         // $food = new Food();
         // $food->name = $request->input('name');
         // $food->count = $request->input('count');
         // $food->description = $request->input('description');
+
+        // $request->validate([
+        //     'name' => new Uppercase,
+        //     'count' => 'required|min:0',
+        //     'category_id' => 'required'
+        // ]);
+
+        $request->validate([]);
+
 
         $food = Food::create([
             'name' => $request->input('name'),
@@ -51,8 +63,9 @@ class FoodController extends Controller
         return view('foods/edit', compact('food'));
     }
 
-    public function update(Request $request, $id)
+    public function update(RequestVadidate $request, $id)
     {
+        $request->validate([]);
         Food::where('id', '=', $id)->update([
             'name' => $request->input('name'),
             'count' => $request->input('count'),
@@ -78,7 +91,6 @@ class FoodController extends Controller
         // thêm category vào food , giống populate trong ExpressJS
         // print_r($category);
 
-        print_r($food);
-        // return ;
+        return view('foods/show', compact('food'));
     }
 }
