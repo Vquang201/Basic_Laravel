@@ -35,12 +35,15 @@ class FoodController extends Controller
             'image' => 'required|mimes:jpg,png|max:6000'
         ]);
 
+        // validate những name ở client(HTML)
+
         // $request->validate([]);
 
         // upload image
         $image = $request->file('image');
         $imageName = time() . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('images'), $imageName);
+
 
 
         $food = Food::create([
