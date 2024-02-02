@@ -8,13 +8,15 @@ use App\Models\Category;
 use App\Models\Food;
 use App\Rules\Uppercase;
 use Illuminate\Http\Request;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class FoodController extends Controller
 {
     public function index()
     {
+        if (!Auth::check()) {
+            return redirect()->route('post')->with('error_role', 'Bạn chưa đăng nhập');
+        }
         $foods = Food::all();
         // SELECT * FROM Food;
         // print_r($food);
@@ -23,14 +25,12 @@ class FoodController extends Controller
 
     public function store(Request $request)
     {
-        // $food = new Food();
-        // $food->name = $request->input('name');
-        // $food->count = $request->input('count');
-        // $food->description = $request->input('description');
+        if (!Auth::check()) {
+            return redirect()->route('post')->with('error_role', 'Bạn chưa đăng nhập');
+        }
 
         $request->validate([
-            'name' => new Uppercase,
-            'count' => 'required|min:0',
+            'name' => 'required',
             'category_id' => 'required',
             'image' => 'required|mimes:jpg,png|max:6000'
         ]);
@@ -38,6 +38,7 @@ class FoodController extends Controller
         // validate những name ở client(HTML)
 
         // $request->validate([]);
+
 
         // upload image
         $image = $request->file('image');
@@ -47,8 +48,8 @@ class FoodController extends Controller
 
 
         $food = Food::create([
+            'user_id' => Auth::user()->id,
             'name' => $request->input('name'),
-            'count' => $request->input('count'),
             'description' => $request->input('description'),
             'category_id' => $request->input('category_id'),
             'image_path' => $imageName
@@ -62,6 +63,9 @@ class FoodController extends Controller
 
     public function create()
     {
+        if (!Auth::check()) {
+            return redirect()->route('post')->with('error_role', 'Bạn chưa đăng nhập');
+        }
         $categories = Category::all();
         // print_r($categories);
         return view('foods/create', compact('categories'));
@@ -79,7 +83,6 @@ class FoodController extends Controller
         $request->validate([]);
         Food::where('id', '=', $id)->update([
             'name' => $request->input('name'),
-            'count' => $request->input('count'),
             'description' => $request->input('description')
         ]);
 

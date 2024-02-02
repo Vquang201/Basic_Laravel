@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Food;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 
 class PostController extends Controller
 {
@@ -13,9 +15,9 @@ class PostController extends Controller
         //query builder (ánh xạ id để hacker khỏi can thiệp trực tiếp)
         // $posts = DB::select('SELECT * FROM posts WHERE id= :id', ['id' => 3]);
 
-        $posts = DB::table("posts")
-            ->where('id', '=', 5)
-            ->delete();
+        // $posts = DB::table("posts")
+        //     ->where('id', '=', 5)
+        //     ->delete();
         // ->update([
         //     'title' => 'haha title',
         //     'body' => 'This is haha body',
@@ -42,6 +44,11 @@ class PostController extends Controller
         //->first();
         //->get();
 
-        print_r($posts);
+
+
+        $foods = Food::all();
+
+        // print_r($foods);
+        return view('posts/index', compact('foods'));
     }
 }

@@ -41,4 +41,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $model = 'users';
+    protected $primaryKey = 'id';
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function food()
+    {
+        return $this->belongsTo(Food::class);
+    }
 }

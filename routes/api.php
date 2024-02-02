@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\ApiFoodController;
+use App\Http\Controllers\api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::apiResource('food', ApiFoodController::class);
+Route::apiResource('auth', AuthController::class);
+Route::post('auth/login', [AuthController::class, 'storeLogin']);
+Route::post('auth/register', [AuthController::class, 'storeRegister']);

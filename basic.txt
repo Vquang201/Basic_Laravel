@@ -22,6 +22,7 @@ php artisan tinker
    + trong này : \App\Models\Post::factory()->create();
    => tạo data fake theo field mặc định trong model Post
 
+
 mysql -u root -p
  + show databases ;
  + use (database);
@@ -29,6 +30,7 @@ mysql -u root -p
  + describe posts;
 
 
+xem list routes
 php artisan route:list
 
 
@@ -36,6 +38,7 @@ php artisan tinker
  => Sau đó trong tinker:
 Schema::dropIfExists('categories');
  =>Sau khi xóa bảng 'categories', bạn có thể chạy lại migration bằng lệnh:
+
 
 php artisan make:Rule Uppercase
 => sử dụng new Uppercase;

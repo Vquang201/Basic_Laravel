@@ -17,11 +17,16 @@ class Food extends Model
     public $timestamps = true;
     protected $fillable = [
         'name', 'count', 'description',
-        'image_path', 'category_id'
+        'image_path', 'category_id', 'user_id',
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
     }
 }

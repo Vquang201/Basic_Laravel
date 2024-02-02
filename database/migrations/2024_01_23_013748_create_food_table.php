@@ -24,16 +24,24 @@ return new class extends Migration
         Schema::create('food', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('count');
+            $table->integer('count')->nullable(true);
             $table->longText('description');
             $table->timestamps();
-            //foreign keys
+            //foreign keys category
             $table->unsignedInteger('category_id');
             $table->foreign('category_id')
                 ->references('id')
                 ->on('categories')
                 ->onDelete('cascade'); // thằng nhiều bị xóa thì thg 1 cũng bị xóa
-            // ->onDelete('set null'); // thg 1 xóa thg nhiều k xóa
+            // ->onDelete('set null'); // thg 1 xóa thg nhiều k xóa..
+
+            //foreign keys user
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade'); // thằng nhiều bị xóa thì thg 1 cũng bị xóa
+            // ->onDelete('set null'); // thg 1 xóa thg nhiều k xóa..
         });
     }
 

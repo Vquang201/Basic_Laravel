@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Food;
 use Illuminate\Http\Request;
+
 
 class ApiFoodController extends Controller
 {
@@ -40,7 +42,7 @@ class ApiFoodController extends Controller
         $food = Food::create([...$request->all(), 'image_path' => $imageName]);
         $food->save();
 
-        return response()->json(['success' => 'Thêm Thành Công'], 200);
+        return ResponseHelper::success('Thêm thành công');
     }
 
     /**
@@ -56,7 +58,7 @@ class ApiFoodController extends Controller
         if (!$food) {
             return response()->json(['Error' => 'Error in server'], 500);
         }
-        return response()->json(['success' => $food], 200);
+        ResponseHelper::success($food);
     }
 
     /**
