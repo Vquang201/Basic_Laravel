@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestVadidate;
 use App\Models\Category;
 use App\Models\Food;
+use App\Models\User;
 use App\Rules\Uppercase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -97,14 +98,21 @@ class FoodController extends Controller
 
     public function show($id)
     {
+
+        // get category trong food ()
         $food = Food::find($id);
-
         $category = Category::find($food->category_id);
-
         $food->category = $category;
-        // thêm category vào food , giống populate trong ExpressJS
+        // thêm category vào food
+
+        // sử dụng with (Eager Loading)
+        // để lấy thông tin người dùng thông qua food id 
+        $user = User::with('food')->find($food->user_id);
+        // with => bảng food
+        // find => tìm id của người dùng
+
         // print_r($category);
 
-        return view('foods/show', compact('food'));
+        return view('foods/show', compact('food', 'user'));
     }
 }
