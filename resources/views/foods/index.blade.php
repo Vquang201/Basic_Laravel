@@ -7,11 +7,12 @@
 @endphp
 <div style="{{$col}}" class="mx-auto">
   <h1 class="mb-3">This is Foods Page</h1>  
-  <a href="food/create" 
-    class="btn btn-primary mb-4"
-    role="button">
-      Create a new Food
-  </a>
+  <div class="d-flex justify-content-between">
+    <a href="food/create" class="btn btn-primary mb-4" role="button">Create a new Food</a>
+    <a href="food-trash" class="btn btn-primary mb-4" role="button">Trash</a>
+  </div>
+
+
 
   <table class="table">
     <thead>

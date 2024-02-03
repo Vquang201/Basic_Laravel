@@ -115,4 +115,28 @@ class FoodController extends Controller
 
         return view('foods/show', compact('food', 'user'));
     }
+
+    public function trash()
+    {
+        $foods = Food::onlyTrashed()->get();
+        return view('foods/trash', compact('foods'));
+    }
+
+    public function trashRestore($id)
+    {
+        Food::withTrashed()
+            ->where('id', $id)
+            ->restore();
+
+        return redirect()->route('trash')->with('success', 'Khôi phục thành công');
+    }
+
+    public function trashDelete($id)
+    {
+        Food::withTrashed()
+            ->where('id', $id)
+            ->forceDelete();
+
+        return redirect()->route('trash')->with('success', 'xóa thành công');
+    }
 }

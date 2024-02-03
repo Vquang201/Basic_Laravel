@@ -26,6 +26,11 @@ Route::post('/logout', [AuthController::class, 'logout']);
 //MIDDLEWARE
 Route::group(['middleware' => 'isAdmin'], function () {
     //FOOD
+    // trash
+    Route::get('/food-trash', [FoodController::class, 'trash'])->name('trash');
+    Route::post('/food-trash/{id}', [FoodController::class, 'trashRestore']);
+    Route::delete('/food-trash/{id}', [FoodController::class, 'trashDelete']);
+    //end trash
     Route::get('food/{food}/edit', [FoodController::class, 'edit'])->name('food.update');
     Route::put('food/{food}', [FoodController::class, 'update'])->name('food.update');
     Route::delete('food/{food}', [FoodController::class, 'destroy'])->name('food.destroy');
