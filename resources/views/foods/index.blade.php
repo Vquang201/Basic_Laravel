@@ -25,6 +25,7 @@
     </thead>
     <tbody>
       @foreach ($foods as $food)
+      @can('update',$food)
       <tr>
         <td>{{$food->id}}</td>
         <td><a href="/food/{{ $food->id }}">{{ $food->name }}</a></td>
@@ -38,6 +39,7 @@
           </form>
         </td>
       </tr>
+      @endcan
       @endforeach
     </tbody>
   </table>      

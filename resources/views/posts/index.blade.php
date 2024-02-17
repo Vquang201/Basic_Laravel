@@ -23,8 +23,16 @@
   Search Foods
 </h3>
 <div class="input-group mb-5 mx-auto" style={{$col}}>
-  <input type="text" class="form-control" placeholder="Enter Foods" aria-label="Recipient's username" aria-describedby="button-addon2">
-  <button class="btn btn-primary" type="button" id="button-addon2">Search</button>
+  <div class="row">
+    <div class="col">
+      <form action="/food-search" method="post" class="d-flex">
+        @csrf
+        @method('post')
+        <input type="text" name="search" class="form-control" placeholder="Enter Foods" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <button class="btn btn-primary" type="submit" id="button-addon2">Search</button>
+      </form>
+    </div>
+  </div>
 </div>
  
 
@@ -41,7 +49,7 @@
         <a href="/food/{{$food->id}}" class="btn btn-primary">View Detail</a>
       </div>
     </div>
-    @endforeach
+  @endforeach
   </div>
 </div>
 

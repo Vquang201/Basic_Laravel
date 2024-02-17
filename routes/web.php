@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,24 +15,32 @@ Route::get('/', function () {
 // AUTH
 Route::get('/auth', [AuthController::class, 'index'])->name('auth');
 Route::post('/auth/login', [AuthController::class, 'login']);
-Route::post('/auth/register', [AuthController::class, 'register']);;
-//FOOD
-Route::resource('food', FoodController::class)->except(['update', 'destroy', 'edit']);
-//POST
-Route::get('/post', [PostController::class, 'index'])->name('post');
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::get('/contact', [UserController::class, 'contact']);
+Route::post('/send-mail', [UserController::class, 'sendMail']);
+
 // logout
 Route::post('/logout', [AuthController::class, 'logout']);
+
+//FOOD
+Route::resource('food', FoodController::class);
+Route::post('/food-search', [FoodController::class, 'search']);
+Route::post('/food-comment/{id}', [FoodController::class, 'comment']);
+Route::delete('/food-comment/{id}', [FoodController::class, 'deleteComment']);
+
+//POST
+Route::get('/post', [PostController::class, 'index'])->name('post');
+
 //MIDDLEWARE
 Route::group(['middleware' => 'isAdmin'], function () {
-    //FOOD
     // trash
     Route::get('/food-trash', [FoodController::class, 'trash'])->name('trash');
     Route::post('/food-trash/{id}', [FoodController::class, 'trashRestore']);
     Route::delete('/food-trash/{id}', [FoodController::class, 'trashDelete']);
     //end trash
-    Route::get('food/{food}/edit', [FoodController::class, 'edit'])->name('food.update');
-    Route::put('food/{food}', [FoodController::class, 'update'])->name('food.update');
-    Route::delete('food/{food}', [FoodController::class, 'destroy'])->name('food.destroy');
+    // Route::get('food/{food}/edit', [FoodController::class, 'edit'])->name('food.update');
+    // Route::put('food/{food}', [FoodController::class, 'update'])->name('food.update');
+    // Route::delete('food/{food}', [FoodController::class, 'destroy'])->name('food.destroy');
     Route::resource('user', UserController::class);
 });
 

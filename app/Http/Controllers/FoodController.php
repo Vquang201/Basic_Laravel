@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestVadidate;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Food;
 use App\Models\User;
-use App\Rules\Uppercase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class FoodController extends Controller
 {
@@ -18,6 +19,7 @@ class FoodController extends Controller
         if (!Auth::check()) {
             return redirect()->route('post')->with('error_role', 'Bạn chưa đăng nhập');
         }
+
         $foods = Food::all();
         // SELECT * FROM Food;
         // print_r($food);
@@ -74,14 +76,17 @@ class FoodController extends Controller
 
     public function edit($id)
     {
-
         $food = Food::find($id);
+        $this->authorize('update', $food);
         return view('foods/edit', compact('food'));
     }
 
-    public function update(RequestVadidate $request, $id)
+    //RequestVadidate
+    public function update(Request $request, $id)
     {
-        $request->validate([]);
+        $food = Food::find($id);
+        $this->authorize('update', $food);
+
         Food::where('id', '=', $id)->update([
             'name' => $request->input('name'),
             'description' => $request->input('description')
@@ -92,6 +97,8 @@ class FoodController extends Controller
 
     public function destroy($id)
     {
+        // $this->authorize('delete', $food);
+
         Food::where('id', '=', $id)->delete();
         return redirect('/food');
     }
@@ -111,9 +118,11 @@ class FoodController extends Controller
         // with => bảng food
         // find => tìm id của người dùng
 
-        // print_r($category);
+        $comments = Comment::where('food_id', $id)
+            ? Comment::where('food_id', $id)->get()
+            : [];
 
-        return view('foods/show', compact('food', 'user'));
+        return view('foods/show', compact('food', 'user', 'comments'));
     }
 
     public function trash()
@@ -138,5 +147,39 @@ class FoodController extends Controller
             ->forceDelete();
 
         return redirect()->route('trash')->with('success', 'xóa thành công');
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $foods = Food::where('name', 'like', '%' . $keyword . '%')->get();
+
+        return view('posts/index', compact('foods'));
+    }
+
+    public function comment(Request $request, $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('post')->with('error_role', 'Bạn chưa đăng nhập');
+        }
+
+        $comment = Comment::create([
+            'user_id' => Auth::user()->id,
+            'food_id' => $id,
+            'content' => $request->comment,
+        ]);
+        $comment->save();
+        return redirect()->route('post')->with('success', 'Comment Thành Công');
+    }
+
+    public function deleteComment(Request $request, $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('post')->with('error_role', 'Bạn chưa đăng nhập');
+        }
+
+        Comment::where('id', '=', $id)->delete();
+
+        return redirect()->route('post')->with('success', 'Xóa Comment Thành Công');
     }
 }

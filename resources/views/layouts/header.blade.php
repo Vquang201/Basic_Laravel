@@ -22,13 +22,13 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="/food">Edit Blog</a>
+          <a class="nav-link text-white" href="/food">Blog Posted</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-white" href="/user">Users</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="contact">Contact</a>
+          <a class="nav-link text-white" href="/contact">Contact</a>
         </li>
       </ul>
     </div>
@@ -39,11 +39,11 @@
           </a>
         
           <ul class="dropdown-menu">
-            <li>
+            {{-- <li>
               <a class="dropdown-item" href="/">
                   Blog Posted
               </a>
-            </li>
+            </li> --}}
             <li>
               <a class="dropdown-item" href="/auth" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   Logout

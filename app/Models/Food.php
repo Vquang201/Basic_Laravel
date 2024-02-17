@@ -28,4 +28,9 @@ class Food extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function food()
     {
         return $this->belongsTo(Food::class);

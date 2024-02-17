@@ -7,7 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
-use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactMail;
+use App\Mail\SendEmail;
 
 class UserController extends Controller
 {
@@ -73,5 +75,18 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             // return redirect()->route('post')->with('success', 'update thành công');
         }
+    }
+
+    function contact()
+    {
+        return view('contact/index');
+    }
+
+    function sendMail(Request $request)
+    {
+        $email = $request->email;
+        // $content = $request->description;
+        Mail::to('vanquangqt01@gmail.com')->send(new SendEmail());
+        return true;
     }
 }
