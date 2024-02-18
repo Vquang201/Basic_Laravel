@@ -7,6 +7,7 @@ use App\Http\Requests\RequestVadidate;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Food;
+use App\Models\Like;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,11 +119,23 @@ class FoodController extends Controller
         // with => bảng food
         // find => tìm id của người dùng
 
+        // show comment 
         $comments = Comment::where('food_id', $id)
             ? Comment::where('food_id', $id)->get()
             : [];
 
-        return view('foods/show', compact('food', 'user', 'comments'));
+
+        // show quantity like and dislike
+        $likes = [];
+        foreach ($comments as $key => $value) {
+            //matrix
+            array_push($likes, [
+                'like' => Like::where('comment_id', $value->id)->where('liked', 1)->count(),
+                'dislike' => Like::where('comment_id', $value->id)->where('disliked', 1)->count(),
+            ]);
+        }
+
+        return view('foods/show', compact('food', 'user', 'comments', 'likes'));
     }
 
     public function trash()
@@ -169,7 +182,8 @@ class FoodController extends Controller
             'content' => $request->comment,
         ]);
         $comment->save();
-        return redirect()->route('post')->with('success', 'Comment Thành Công');
+        session()->flash('success', 'Comment thành công');
+        return redirect()->back();
     }
 
     public function deleteComment(Request $request, $id)
@@ -180,6 +194,68 @@ class FoodController extends Controller
 
         Comment::where('id', '=', $id)->delete();
 
-        return redirect()->route('post')->with('success', 'Xóa Comment Thành Công');
+        session()->flash('success', 'Xóa comment thành công');
+        return redirect()->back();
+    }
+
+    public function likeComment(Request $request, $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('post')->with('error_role', 'Bạn chưa đăng nhập');
+        }
+        $user_id = Auth::user()->id;
+
+        // Kiểm tra xem người dùng đã like comment này chưa
+        $existingLike = Like::where('user_id', $user_id)
+            ->where('comment_id', $id)
+            ->first();
+
+        if (empty($existingLike)) {
+            // Nếu chưa like, xử lý hành động like ở đây
+            Like::create([
+                'user_id' => $user_id,
+                'comment_id' => $id,
+                'liked' => 1,
+                'disliked' => 0
+            ]);
+            session()->flash('success', 'Like thành công');
+            return redirect()->back();
+        } else {
+            // Nếu đã like xóa like
+            $existingLike->delete();
+            session()->flash('success', 'Đã hủy Like');
+            return redirect()->back();
+        }
+    }
+
+    public function dislikeComment(Request $request, $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('post')->with('error_role', 'Bạn chưa đăng nhập');
+        }
+
+        $user_id = Auth::user()->id;
+
+        // Kiểm tra xem người dùng đã dislike comment này chưa
+        $existingLike = Like::where('user_id', $user_id)
+            ->where('comment_id', $id)
+            ->first();
+
+        if (empty($existingLike)) {
+            // Nếu chưa like, xử lý hành động like ở đây
+            Like::create([
+                'user_id' => $user_id,
+                'comment_id' => $id,
+                'liked' => 0,
+                'disliked' => 1
+            ]);
+            session()->flash('success', 'DisLike thành công');
+            return redirect()->back();
+        } else {
+            // Nếu đã like xóa like
+            $existingLike->delete();
+            session()->flash('success', 'Đã hủy DisLike');
+            return redirect()->back();
+        }
     }
 }

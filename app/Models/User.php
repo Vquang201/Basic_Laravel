@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
+    public function like()
+    {
+        return $this->hasOne(Like::class);
+    }
+
     public function food()
     {
         return $this->belongsTo(Food::class);

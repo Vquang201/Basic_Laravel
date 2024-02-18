@@ -26,6 +26,8 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::resource('food', FoodController::class);
 Route::post('/food-search', [FoodController::class, 'search']);
 Route::post('/food-comment/{id}', [FoodController::class, 'comment']);
+Route::post('/food-like/{id}', [FoodController::class, 'likeComment']);
+Route::post('/food-dislike/{id}', [FoodController::class, 'dislikeComment']);
 Route::delete('/food-comment/{id}', [FoodController::class, 'deleteComment']);
 
 //POST
