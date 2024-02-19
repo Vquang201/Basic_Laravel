@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -21,6 +22,9 @@ Route::post('/send-mail', [UserController::class, 'sendMail']);
 
 // logout
 Route::post('/logout', [AuthController::class, 'logout']);
+
+//dashboard
+Route::resource('/', DashBoardController::class);
 
 //FOOD
 Route::resource('food', FoodController::class);

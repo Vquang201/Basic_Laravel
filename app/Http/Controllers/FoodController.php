@@ -242,7 +242,7 @@ class FoodController extends Controller
             ->first();
 
         if (empty($existingLike)) {
-            // Nếu chưa like, xử lý hành động like ở đây
+            // Nếu chưa dislike, xử lý hành động dislike ở đây
             Like::create([
                 'user_id' => $user_id,
                 'comment_id' => $id,
