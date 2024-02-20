@@ -37,6 +37,11 @@ Route::delete('/food-comment/{id}', [FoodController::class, 'deleteComment']);
 //POST
 Route::get('/post', [PostController::class, 'index'])->name('post');
 
+//USERS
+Route::get('/user/{id}', [UserController::class, 'show']);
+Route::put('/user/profile/{id}', [UserController::class, 'updateProfile']);
+
+
 //MIDDLEWARE
 Route::group(['middleware' => 'isAdmin'], function () {
     // trash
@@ -47,7 +52,7 @@ Route::group(['middleware' => 'isAdmin'], function () {
     // Route::get('food/{food}/edit', [FoodController::class, 'edit'])->name('food.update');
     // Route::put('food/{food}', [FoodController::class, 'update'])->name('food.update');
     // Route::delete('food/{food}', [FoodController::class, 'destroy'])->name('food.destroy');
-    Route::resource('user', UserController::class);
+    Route::resource('user', UserController::class)->except('show');
 });
 
 

@@ -9,7 +9,8 @@
   $commentAvatarStyle = "width: 50px; height: 50px; border-radius: 50%;";
   $commentUsernameStyle = "font-weight: bold; margin-left: 10px; color: #333;";
   $commentTextStyle = "margin-left: 10px; font-size: 14px; color: #333;";
-  $commentDelete = "margin-left: auto"
+  $commentDelete = "margin-left: auto";
+  $containContent = "display:flex"
   
 @endphp
 
@@ -55,30 +56,32 @@
         @foreach($comments as $key => $comment)
           @can('delete', $comment)
             <div style="{{ $commentContainerStyle }}">
-              <div class="text-center">
-                <img style="{{ $commentAvatarStyle }}" src="https://phongreviews.com/wp-content/uploads/2022/11/avatar-facebook-mac-dinh-19.jpg" alt="Avatar">
-                <p style="{{ $commentUsernameStyle }}">{{$comment->user->name}}</p>
-            </div>
-            <p style="{{ $commentTextStyle }}">{{$comment->content}}</p>
-            <div style="{{$commentDelete}}">
-              <div style="{{$like}}">
-                <form action="/food-like/{{$comment->id}}" method="post">
-                  @csrf
-                  @method('post')                                      
-                  <button type="submit" class="btn">
-                    <span class="text-primary">{{$likes[$key]['like']}}</span>
-                     <i class="fa fa-hand-o-up" aria-hidden="true"></i>
-                    </button>
-                </form>
-                <form action="/food-dislike/{{$comment->id}}" method="post">
-                  @csrf
-                  @method('post') 
-                  <button type="submit" class="btn">
-                    <span class="text-primary">{{$likes[$key]['dislike']}}</span>
-                     <i class="fa fa-hand-o-down" aria-hidden="true"></i>
-                    </button>
-                </form>
+              <div class="ms-3" style="{{$containContent}}">
+                <img style="{{ $commentAvatarStyle }}" src="{{asset('images/'.$comments[$key]->user->avatar_img)}}" alt="Avatar">
+                <div class="ms-3">
+                  <p style="{{ $commentUsernameStyle }}">{{$comment->user->name}}</p>
+                  <p style="{{ $commentTextStyle }}">{{$comment->content}}</p>
+                </div>
               </div>
+              <div style="{{$commentDelete}}">
+                <div style="{{$like}}">
+                  <form action="/food-like/{{$comment->id}}" method="post">
+                    @csrf
+                    @method('post')                                      
+                    <button type="submit" class="btn">
+                      <span class="text-primary">{{$likes[$key]['like']}}</span>
+                       <i class="fa fa-hand-o-up" aria-hidden="true"></i>
+                      </button>
+                  </form>
+                  <form action="/food-dislike/{{$comment->id}}" method="post">
+                    @csrf
+                    @method('post') 
+                    <button type="submit" class="btn">
+                      <span class="text-primary">{{$likes[$key]['dislike']}}</span>
+                       <i class="fa fa-hand-o-down" aria-hidden="true"></i>
+                      </button>
+                  </form>
+                </div>
                 <form action="/food-comment/{{$comment->id}}" method="post">
                   @csrf
                   @method('delete')
@@ -88,15 +91,17 @@
             </div>
           @else
           <div style="{{ $commentContainerStyle }}">
-            <div class="text-center">
-              <img style="{{ $commentAvatarStyle }}" src="https://phongreviews.com/wp-content/uploads/2022/11/avatar-facebook-mac-dinh-19.jpg" alt="Avatar">
-              <p style="{{ $commentUsernameStyle }}">{{$comment->user->name}}</p>
+            <div class="ms-3" style="{{$containContent}}">
+              <img style="{{ $commentAvatarStyle }}" src="{{asset('images/'.$comments[$key]->user->avatar_img)}}" alt="Avatar">
+              <div class="ms-3">
+                <p style="{{ $commentUsernameStyle }}">{{$comment->user->name}}</p>
+                <p style="{{ $commentTextStyle }}">{{$comment->content}}</p>
+              </div>
             </div>
-            <p style="{{ $commentTextStyle }}">{{$comment->content}}</p>
-            <div style="{{$commentDelete}}">
-              <div style="{{$like}}">
                 <form action="/food-like/{{$comment->id}}" method="post">
                   @csrf
+            <div style="{{$commentDelete}}">
+              <div style="{{$like}}">
                   @method('post')                                      
                   <button type="submit" class="btn">
                     <span class="text-primary">{{$likes[$key]['like']}}</span>

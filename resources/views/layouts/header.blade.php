@@ -39,11 +39,11 @@
           </a>
         
           <ul class="dropdown-menu">
-            {{-- <li>
-              <a class="dropdown-item" href="/">
-                  Blog Posted
+            <li>
+              <a class="dropdown-item" href="/user/{{Auth::user()->id}}">
+                  Profile
               </a>
-            </li> --}}
+            </li>
             <li>
               <a class="dropdown-item" href="/auth" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   Logout

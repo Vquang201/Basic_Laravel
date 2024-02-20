@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\ContactMail;
 use App\Mail\SendEmail;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -42,14 +42,63 @@ class UserController extends Controller
         return view('/users/create');
     }
 
-    function show($id)
-    {
-    }
+
 
     function edit($id)
     {
         $user = User::find($id);
         return view('/users/edit', compact('user'));
+    }
+
+    function show($id)
+    {
+
+        $user = User::find($id);
+        $this->authorize('show', $user, $id);
+        return view('users/show', compact('user'));
+    }
+
+    function updateProfile(Request $request, $id)
+    {
+        $image = $request->file('image');
+
+        if (!empty($image)) {
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+        }
+
+        $user = User::find($id);
+        // $this->authorize('show', $user,$id);
+
+
+        if ($request->oldPassword) {
+            // check old password
+            if (Hash::check($request->oldPassword, $user->password)) {
+                // The passwords match...
+                // hash password 
+                $hash = Hash::make($request->newPassword);
+
+                User::where('id', $id)->update([
+                    'name' => $request->name,
+                    'password' => $hash,
+                    'avatar_img' => $imageName ?? $user->avatar_img
+                ]);
+
+                session()->flash('success', 'update profile thành công');
+                return redirect()->back();
+            } else {
+                session()->flash('fail', 'Mật khẩu Cũ Không Đúng !!!');
+                return redirect()->back();
+            }
+        }
+
+        User::where('id', $id)->update([
+            'name' => $request->name,
+            'avatar_img' => $imageName ?? $user->avatar_img
+        ]);
+
+        session()->flash('success', 'update profile thành công');
+        return redirect()->back();
     }
 
     function update(Request $request, $id)
@@ -76,6 +125,8 @@ class UserController extends Controller
             // return redirect()->route('post')->with('success', 'update thành công');
         }
     }
+
+
 
     function contact()
     {

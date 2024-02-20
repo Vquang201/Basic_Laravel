@@ -125,6 +125,9 @@ class FoodController extends Controller
             : [];
 
 
+        //lấy thông tin user thông qua user_id trong comments
+        // return dd($comments[0]->user);
+
         // show quantity like and dislike
         $likes = [];
         foreach ($comments as $key => $value) {
@@ -134,6 +137,8 @@ class FoodController extends Controller
                 'dislike' => Like::where('comment_id', $value->id)->where('disliked', 1)->count(),
             ]);
         }
+
+
 
         return view('foods/show', compact('food', 'user', 'comments', 'likes'));
     }
